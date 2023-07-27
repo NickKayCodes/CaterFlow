@@ -1,0 +1,48 @@
+<div class="user-console container">
+  <!-- table is temporary will have to auto populate users list with ngFor from server
+    will have to build a template for rows and column    
+-->
+  <table mat-table class="table">
+    <thead>
+      <tr>
+        <th scope="col"><h3>User Console</h3></th>
+        <th scope="col"></th>
+        <th></th>
+        <th></th>
+
+        <th scope="col">
+          <button class="btn btn-primary" routerLink="/addUser">
+            add user
+          </button>
+        </th>
+      </tr>
+      <tr>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Email</th>
+        <th scope="col" colspan="1">Edit</th>
+        <th scope="col">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of userData">
+        <td>{{u.firstName}}</td>
+        <td>{{u.lastName}}</td>
+        <td>{{u.email}}</td>
+        <td>
+          <mat-icon>
+            <!-- will update to send to edit user component-->
+            <span class="material-symbols-outlined"> edit </span>
+          </mat-icon>
+        </td>
+        <td>
+          <mat-icon>
+            <!-- will need a function to delete user...-->
+            <span class="material-symbols-outlined"> delete </span>
+          </mat-icon>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
