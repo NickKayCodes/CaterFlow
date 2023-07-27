@@ -1,0 +1,11 @@
+.dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .dropdown-menu {
+    left: auto;
+    right: 0;
+  }
+}
