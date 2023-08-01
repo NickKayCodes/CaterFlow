@@ -55,12 +55,9 @@ public class UserController {
         String encodedPw = passwordEncoder.encodePassword(plainTextPw);
         userData.setPassword(encodedPw);
 
-        //save user without roles first we will assign roles below
-        User savedUser = userRepository.save(userData);
+        Set<UserRole> rolesToAssign = userData.getRoles();
 
-        //save user and assigned roles to db
-        userRepository.save(savedUser);
-
+        userService.assignRolesToUser(userData, rolesToAssign);
         return ResponseEntity.ok("User successfully registered");
     }
 
@@ -73,8 +70,7 @@ public class UserController {
         if (existingUser.isEmpty()) {
             return ResponseEntity.badRequest().body("User Not Found");
         }
-        User u = new User();
-        u = existingUser.get();
+        User u = existingUser.get();
 
         userService.saveUser(u);
 
