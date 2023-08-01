@@ -1,10 +1,11 @@
 package com.krath.CaterFlowBackEnd.user.enitity;
 
+import com.krath.CaterFlowBackEnd.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @ToString
@@ -23,14 +24,9 @@ public class User implements Serializable {
     private String lastName;
     private String email;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "user_roles",
-            joinColumns = {
-                    @JoinColumn(name = "user_id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "role_id")
-            })
-    private List<Roles> roles;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<UserRole> roles;
 
 }

@@ -1,18 +1,19 @@
 package com.krath.CaterFlowBackEnd.user.controller;
 
 import com.krath.CaterFlowBackEnd.sec.PasswordEncoder;
-import com.krath.CaterFlowBackEnd.user.enitity.Roles;
 import com.krath.CaterFlowBackEnd.user.enitity.User;
+import com.krath.CaterFlowBackEnd.user.enums.UserRole;
 import com.krath.CaterFlowBackEnd.user.repository.UserRepository;
-import com.krath.CaterFlowBackEnd.user.service.roles.RolesServiceImpl;
+import com.krath.CaterFlowBackEnd.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/user")
@@ -26,7 +27,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private RolesServiceImpl rolesService;
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity loginUser(@RequestBody User userData) {
@@ -57,40 +58,26 @@ public class UserController {
         //save user without roles first we will assign roles below
         User savedUser = userRepository.save(userData);
 
-        //after user is saved we will grab the auto generated userId
-        Long userId = savedUser.getId();
-
-        //grab roles from request body
-        List<Roles> rolesList = userData.getRoles();
-        //check if the role assignment is not empty and not null
-        if (rolesList != null && !rolesList.isEmpty()) {
-            //create a temp roles list
-            List<Roles> savedRoles = new ArrayList<>();
-
-            //iterate through rolesList
-            rolesList.forEach(role -> {
-                //find each roll name
-                Roles existingRole = rolesService.findByName(role.getRoleName());
-                if (existingRole != null) {
-                    savedRoles.add(existingRole);
-
-                } else {
-                    //save the role ang get either the existing role or the newly saved role
-                    Roles newRoles = rolesService.saveRole(role);
-                    savedRoles.add(newRoles);
-                }
-            });
-
-            //set the list of roles to the user after using the auto-generated userId
-            savedUser.setRoles(savedRoles);
-
-            //save user and assigned roles to db
-            userRepository.save(savedUser);
-
-
-        }
-
+        //save user and assigned roles to db
+        userRepository.save(savedUser);
 
         return ResponseEntity.ok("User successfully registered");
+    }
+
+    //re-assigns roles when in specific user details screen ---unsure about the actual name of that kind of page
+    //will probably refactor for an update user method.
+    @PostMapping("/assignroles")
+    public ResponseEntity assignUserRoles(@RequestBody User userWithRoles) {
+        Set<UserRole> rolesToAssign = userWithRoles.getRoles();
+        Optional<User> existingUser = userRepository.findById(userWithRoles.getId());
+        if (existingUser.isEmpty()) {
+            return ResponseEntity.badRequest().body("User Not Found");
+        }
+        User u = new User();
+        u = existingUser.get();
+
+        userService.saveUser(u);
+
+        return ResponseEntity.ok("User roles are successfully assigned.");
     }
 }
