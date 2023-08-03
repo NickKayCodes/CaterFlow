@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,7 +15,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { UserConsoleComponent } from './components/user-console/user-console/user-console.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +22,6 @@ import { UserConsoleComponent } from './components/user-console/user-console/use
     NavbarComponent,
     HomeComponent,
     UserConsoleComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -32,7 +31,8 @@ import { UserConsoleComponent } from './components/user-console/user-console/use
     HttpClientModule,
     RouterModule,
     MatFormFieldModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBar,
   ],
   providers: [],
   bootstrap: [AppComponent],

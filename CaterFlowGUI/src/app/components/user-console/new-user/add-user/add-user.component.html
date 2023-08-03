@@ -2,54 +2,81 @@
 <!-- 
     to add new users to application form template
  -->
-<div class="container" style="padding-left: 20%;">
-<form class="example-form form-group">
-  <mat-form-field class="example-full-width">
-    <mat-label>Company (disabled)</mat-label>
-    <input matInput disabled value=" CaterFlow --- Client Company Name">
-  </mat-form-field>
+<div class="container" style="padding-left: 20%">
+  <form class="example-form form-group">
+    <mat-form-field class="example-full-width">
+      <mat-label>Company (disabled)</mat-label>
+      <input matInput disabled value=" CaterFlow --- Client Company Name" />
+    </mat-form-field>
 
-  <table class="example-full-width" cellspacing="0"><tr>
-    <td><mat-form-field class="example-full-width">
-      <mat-label>First name</mat-label>
-      <input matInput>
-    </mat-form-field></td>
-    <td><mat-form-field class="example-full-width">
-      <mat-label>Last Name</mat-label>
-      <input matInput>
-    </mat-form-field></td>
-  </tr></table>
+    <table class="example-full-width" cellspacing="0">
+      <tr>
+        <h4>Employee Information</h4>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field class="example-full-width">
+            <mat-label>First name</mat-label>
+            <input matInput name="f-name-txt-box" [(ngModel)]="userRegistrationForm.firstName"/>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="example-full-width">
+            <mat-label >Last Name</mat-label>
+            <input matInput name="l-name-txt-box" [(ngModel)]="userRegistrationForm.lastName"/>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field class="example-full-width">
+            <mat-label >Username</mat-label>
+            <input matInput [(ngModel)]="userRegistrationForm.username"/>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="example-full-width">
+            <mat-label >Password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="userRegistrationForm.password" />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
 
-  <p>
-    
-    <td><mat-form-field class="example-full-width">
-      <mat-label>Username</mat-label>
-      <input matInput>
-    </mat-form-field></td>
-    <td> <mat-form-field>
-    <mat-label>Password</mat-label>
-    <input matInput [type]="hide ? 'password' : 'text'">
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
-  </mat-form-field></td>
- 
-  </p>
+    <table class="example-full-width" cellspacing="0">
+      <tr>
+        <td>
+          <mat-form-field class="example-full-width">
+            <mat-label>E-mail</mat-label>
+            <input matInput placeholder="jlynn@caterflow.com" name="email-txt-box" [(ngModel)]="userRegistrationForm.email"/>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
 
-  <table class="example-full-width" cellspacing="0"><tr>
-    <td><mat-form-field class="example-full-width">
-      <mat-label>City</mat-label>
-      <input matInput placeholder="Ex. San Francisco">
-    </mat-form-field></td>
-    <td><mat-form-field class="example-full-width">
-      <mat-label>State</mat-label>
-      <input matInput placeholder="Ex. California">
-    </mat-form-field></td>
-    <td><mat-form-field class="example-full-width">
-      <mat-label>Postal Code</mat-label>
-      <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" value="94043">
-      <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-    </mat-form-field></td>
-  </tr></table>
-</form>
+    <table class="example-full-width" cellspacing="0">
+      <tr>
+        <h4>Employee Roles</h4>
+      </tr>
+      <ng-container *ngFor="let r of roleNames">
+        <tr>
+          <td>
+            <mat-checkbox name="role-chkbx" [(ngModel)]="userRegistrationForm.roles">{{ r }}</mat-checkbox>
+          </td>
+        </tr>
+      </ng-container>
+      <tr>
+        <button mat-button class=" btn btn-right btn-primary" onSubmit()>Submit</button>
+      </tr>
+    </table>
+  </form>
 </div>

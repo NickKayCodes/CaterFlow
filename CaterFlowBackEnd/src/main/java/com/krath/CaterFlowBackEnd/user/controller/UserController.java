@@ -50,7 +50,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity registerUser(@RequestBody User userData) {
+        System.out.println(userData);
         //grab password from front end, encode using bcrypt and then set the encrypted password to store
+        if (userData.getPassword() == null || userData.getPassword().isEmpty()) {
+            return ResponseEntity.badRequest().body("Password cannot be null or empty.");
+        }
+
         String plainTextPw = userData.getPassword();
         String encodedPw = passwordEncoder.encodePassword(plainTextPw);
         userData.setPassword(encodedPw);
