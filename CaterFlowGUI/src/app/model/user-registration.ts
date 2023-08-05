@@ -1,12 +1,14 @@
+import { UserRole } from "../components/shared/enums/user-role.enum";
+
 export class UserRegistration{
     username: string;
     password: string;
     firstName: string;
     lastName: string;
     email: string;
-    roles: string[];
+    roles: UserRole[];
 
-    constructor(username: string, password: string, firstName: string, lastName: string, email: string, roles: string[]) {
+    constructor(username: string, password: string, firstName: string, lastName: string, email: string, roles: UserRole[]) {
         this.username = username
         this.password = password
         this.firstName = firstName

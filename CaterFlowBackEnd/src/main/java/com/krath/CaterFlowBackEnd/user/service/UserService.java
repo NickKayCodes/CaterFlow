@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Service
 public interface UserService {
-    User saveUser(User user);
+    void saveUser(User user);
 
     User getUserByEmail(String email);
 

@@ -3,6 +3,8 @@ package com.krath.CaterFlowBackEnd.user.service;
 import com.krath.CaterFlowBackEnd.user.enitity.User;
 import com.krath.CaterFlowBackEnd.user.enums.UserRole;
 import com.krath.CaterFlowBackEnd.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,15 +13,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+
 @Service
 public class UserServiceImpl implements UserService {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 
     @Override
@@ -64,13 +68,16 @@ public class UserServiceImpl implements UserService {
         return allRoles.contains(role);
     }
 
+    @Transactional
     @Override
     public void assignRolesToUser(User user, Set<UserRole> roles) {
-        user.getRoles().clear();
-
-        //since using an enum and UI will never have roles that does not exist we can just add the roles to the set directly
-        user.getRoles().addAll(roles);
-
-        userRepository.save(user);
+//        logger.info("starting assignRolesToUser()| " + user + " | " + roles);
+//        user.getRoles().removeAll(roles);
+//
+//        //since using an enum and UI will never have roles that does not exist we can just add the roles to the set directly
+//        user.getRoles().addAll(roles);
+//
+//        userRepository.save(user);
+//        logger.info("roles assigned to user complete: " + user);
     }
 }

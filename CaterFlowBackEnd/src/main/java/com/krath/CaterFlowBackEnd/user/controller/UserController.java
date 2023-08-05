@@ -11,14 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class UserController {
+
 
     @Autowired
     private UserRepository userRepository;
@@ -29,9 +32,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    public UserController() {
+    }
+
     @PostMapping("/login")
     public ResponseEntity loginUser(@RequestBody User userData) {
-        User user = userRepository.findByUserName(userData.getUserName());
+        User user = userRepository.findByUserName(userData.getUsername());
         if (user != null) {
             if (passwordEncoder.passwordMatch(userData.getPassword(), user.getPassword()))
                 return ResponseEntity.ok(user);
@@ -50,7 +56,6 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity registerUser(@RequestBody User userData) {
-        System.out.println(userData);
         //grab password from front end, encode using bcrypt and then set the encrypted password to store
         if (userData.getPassword() == null || userData.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body("Password cannot be null or empty.");
@@ -60,25 +65,19 @@ public class UserController {
         String encodedPw = passwordEncoder.encodePassword(plainTextPw);
         userData.setPassword(encodedPw);
 
-        Set<UserRole> rolesToAssign = userData.getRoles();
+        //save user before assigning roles due to jpa/hibernate not generating the id to enter the roles to the db
+//        User savedUser =
+        userRepository.save(userData);
 
-        userService.assignRolesToUser(userData, rolesToAssign);
+        //retrieve user from db since now there will be an ID associated with the user
+//        Optional<User> retrieveUser = userRepository.findById(savedUser.getId());
+//        if (retrieveUser.isPresent()) {
+//            Set<UserRole> rolesToAssign = userData.getRoles();
+//
+//            User u = retrieveUser.get();
+//            userService.assignRolesToUser(u, rolesToAssign);
+//        }
+
         return ResponseEntity.ok("User successfully registered");
-    }
-
-    //re-assigns roles when in specific user details screen ---unsure about the actual name of that kind of page
-    //will probably refactor for an update user method.
-    @PostMapping("/assignroles")
-    public ResponseEntity assignUserRoles(@RequestBody User userWithRoles) {
-        Set<UserRole> rolesToAssign = userWithRoles.getRoles();
-        Optional<User> existingUser = userRepository.findById(userWithRoles.getId());
-        if (existingUser.isEmpty()) {
-            return ResponseEntity.badRequest().body("User Not Found");
-        }
-        User u = existingUser.get();
-
-        userService.saveUser(u);
-
-        return ResponseEntity.ok("User roles are successfully assigned.");
     }
 }

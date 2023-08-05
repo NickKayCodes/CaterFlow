@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,7 +32,7 @@ import { UserConsoleComponent } from './components/user-console/user-console/use
     RouterModule,
     MatFormFieldModule,
     MatIconModule,
-    MatSnackBar,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
