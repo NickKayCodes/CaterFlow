@@ -19,4 +19,5 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String Name;
+    //may add quantity in future for inventory reasons
 }
