@@ -33,3 +33,6 @@ $CaterFlowGUI-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($CaterFlowGUI-theme);
 
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';

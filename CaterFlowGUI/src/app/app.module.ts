@@ -14,6 +14,7 @@ import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { UserConsoleComponent } from './components/user-console/user-console/user-console.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -29,5 +30,6 @@ import { UserConsoleComponent } from './components/user-console/user-console/use
         RouterModule,
         MatFormFieldModule,
         MatIconModule,
-        MatSnackBarModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        MatSnackBarModule,
+        NgbModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
