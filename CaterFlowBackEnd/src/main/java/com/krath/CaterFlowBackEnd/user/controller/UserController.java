@@ -1,8 +1,7 @@
 package com.krath.CaterFlowBackEnd.user.controller;
 
-import com.krath.CaterFlowBackEnd.sec.PasswordEncoder;
+import com.krath.CaterFlowBackEnd.sec.SecurityConfig;
 import com.krath.CaterFlowBackEnd.user.enitity.User;
-import com.krath.CaterFlowBackEnd.user.enums.UserRole;
 import com.krath.CaterFlowBackEnd.user.repository.UserRepository;
 import com.krath.CaterFlowBackEnd.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/user")
@@ -27,7 +22,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private SecurityConfig passwordEncoder;
 
     @Autowired
     private UserService userService;

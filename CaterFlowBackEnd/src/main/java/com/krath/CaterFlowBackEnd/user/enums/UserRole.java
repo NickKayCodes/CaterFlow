@@ -11,5 +11,6 @@ public enum UserRole {
     CAPTAIN,
     SALES_PLANNER,
     ADMIN,
-    MANAGER
+    MANAGER,
+    WAREHOUSE
 }

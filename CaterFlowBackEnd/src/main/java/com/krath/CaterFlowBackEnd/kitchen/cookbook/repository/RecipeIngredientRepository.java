@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RecipeIngredientRepository extends JpaRepository<Long, RecipeIngredient> {
+public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, Long> {
 
     //may not work will have to fix this when everything falls together for the cookbook ui since recipe on the RecipeIngredient table is an id number
     @Query(value = "select ri from RecipeIngredient ri where ri.recipe = :recipe")

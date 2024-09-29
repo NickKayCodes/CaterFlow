@@ -4,10 +4,12 @@ import com.krath.CaterFlowBackEnd.kitchen.menu.entity.CFMenu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface CFMenuRepository extends JpaRepository<Long, CFMenu> {
+@Repository
+public interface CFMenuRepository extends JpaRepository<CFMenu, Long> {
 
     @Query(value = "select m from CFMenu m where m.dishName = :dishName")
     CFMenu dishName(@Param("dishName") String dishName);

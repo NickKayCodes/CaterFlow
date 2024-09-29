@@ -1,5 +1,5 @@
 <div class="container" style="padding-left: 20%">
-  <form class="example-form form-group">
+  <form class="example-form form-group" (ngSubmit) = "onSubmit()" [formGroup]="userRegistrationForm">
     <mat-form-field class="example-full-width">
       <mat-label>Company (disabled)</mat-label>
       <input matInput disabled value=" CaterFlow --- Client Company Name" />
@@ -13,23 +13,13 @@
         <td>
           <mat-form-field class="example-full-width">
             <mat-label>First name</mat-label>
-            <input
-              matInput
-              name="f-name-txt-box"
-              [(ngModel)]="userRegistrationForm.firstName"
-
-            />
+            <input matInput name="f-name-txt-box" formControlName="firstName" />
           </mat-form-field>
         </td>
         <td>
           <mat-form-field class="example-full-width">
             <mat-label>Last Name</mat-label>
-            <input
-              matInput
-              name="l-name-txt-box"
-              [(ngModel)]="userRegistrationForm.lastName"
-
-            />
+            <input matInput name="l-name-txt-box" formControlName="lastName" />
           </mat-form-field>
         </td>
       </tr>
@@ -37,31 +27,16 @@
         <td>
           <mat-form-field class="example-full-width">
             <mat-label>Username</mat-label>
-            <input
-              matInput
-              name="username-txtbox"
-              [(ngModel)]="userRegistrationForm.username"
-
-            />
+            <input matInput name="username-txtbox" formControlName="username" />
           </mat-form-field>
         </td>
         <td>
           <mat-form-field class="example-full-width">
             <mat-label>Password</mat-label>
-            <input
-              matInput
-              [type]="hide ? 'password' : 'text'"
-              name="pw-textbox"
-              [(ngModel)]="userRegistrationForm.password"
-
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              (click)="hide = !hide"
-              [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hide"
-            >
+            <input matInput [type]="hide ? 'password' : 'text'" name="pw-textbox"
+              formControlName="password" />
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide">
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
           </mat-form-field>
@@ -74,13 +49,8 @@
         <td>
           <mat-form-field class="example-full-width">
             <mat-label>E-mail</mat-label>
-            <input
-              matInput
-              placeholder="jlynn@caterflow.com"
-              name="email-txt-box"
-              [(ngModel)]="userRegistrationForm.email"
-
-            />
+            <input matInput placeholder="jlynn@caterflow.com" name="email-txt-box"
+              formControlName="email" />
           </mat-form-field>
         </td>
       </tr>
@@ -94,23 +64,14 @@
       <ng-container *ngFor="let r of roleNames">
         <tr>
           <td>
-            <mat-checkbox
-              name="roles-chkbx"
-
-              (change)="onRoleSelectionChange($event, r)"
-              [checked]="selectedRoles.includes(r)"
-
-              >{{ r }}
+            <mat-checkbox name="roles-chkbx"
+              [checked]="selectedRoles.includes(r)">{{ r }}
             </mat-checkbox>
           </td>
         </tr>
       </ng-container>
       <tr>
-        <button
-          mat-button
-          class="btn btn-right btn-primary"
-          (click)="onSubmit()"
-        >
+        <button mat-button class="btn btn-right btn-primary" type="submit" name="submit-btn">
           Submit
         </button>
       </tr>

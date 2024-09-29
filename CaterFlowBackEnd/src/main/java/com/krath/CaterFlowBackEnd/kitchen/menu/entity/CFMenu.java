@@ -9,7 +9,6 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @RequiredArgsConstructor
 @ToString
 public class CFMenu {

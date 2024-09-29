@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IngredientRepository extends JpaRepository<Long, Ingredient> {
+public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     //finding singular ingredient
     @Query(value = "select i from Ingredient i where i.name = :name")

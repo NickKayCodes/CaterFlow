@@ -13,11 +13,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String Name;
+    private String name;
     //may add quantity in future for inventory reasons
 }

@@ -9,7 +9,6 @@ import java.time.Duration;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @RequiredArgsConstructor
 @ToString
 public class Recipe {

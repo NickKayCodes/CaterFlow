@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RecipeRepository extends JpaRepository<Long, Recipe> {
+public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(value = "select r from Recipe r where r.name = :name")
     Recipe findByName(@Param("name") String Name);
 

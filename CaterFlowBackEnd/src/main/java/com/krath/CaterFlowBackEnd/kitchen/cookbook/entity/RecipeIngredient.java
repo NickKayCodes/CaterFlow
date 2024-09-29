@@ -9,7 +9,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @RequiredArgsConstructor
 public class RecipeIngredient {
     @Id
