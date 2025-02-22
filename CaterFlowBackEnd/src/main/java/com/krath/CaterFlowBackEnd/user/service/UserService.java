@@ -25,4 +25,6 @@ public interface UserService {
 
     void assignRolesToUser(User user, Set<UserRole> roles);
 
+    User findByUsername(String username);
+
 }

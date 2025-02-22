@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         //unsure whether I want server or angular app to handle email validation... will have to decide in future
-        return userRepository.findByEmail(email);
+        return userRepository.getUserByEmail(email);
     }
 
     @Override
@@ -79,5 +79,10 @@ public class UserServiceImpl implements UserService {
 //
 //        userRepository.save(user);
 //        logger.info("roles assigned to user complete: " + user);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUserName(username);
     }
 }

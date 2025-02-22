@@ -1,12 +1,17 @@
 package com.krath.CaterFlowBackEnd.user.controller;
 
 import com.krath.CaterFlowBackEnd.sec.SecurityConfig;
+import com.krath.CaterFlowBackEnd.sec.jwt.JwtUtil;
 import com.krath.CaterFlowBackEnd.user.enitity.User;
 import com.krath.CaterFlowBackEnd.user.repository.UserRepository;
 import com.krath.CaterFlowBackEnd.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,25 +27,26 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private SecurityConfig passwordEncoder;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     public UserController() {
     }
 
     @PostMapping("/login")
     public ResponseEntity loginUser(@RequestBody User userData) {
-        User user = userRepository.findByUserName(userData.getUsername());
-        if (user != null) {
-            if (passwordEncoder.passwordMatch(userData.getPassword(), user.getPassword()))
-                return ResponseEntity.ok(user);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userData.getUsername(), userData.getPassword())
+            );
+            UserDetails userDetails = userService.getUserByEmail(userData.getEmail());
+
         }
-        return new ResponseEntity(
-                "Login failure.",
-                HttpStatus.BAD_REQUEST
-        );
     }
 
     @GetMapping("/getAllUsers")
