@@ -1,6 +1,6 @@
 package com.krath.CaterFlowBackEnd.user.service;
 
-import com.krath.CaterFlowBackEnd.user.enitity.User;
+import com.krath.CaterFlowBackEnd.user.entity.User;
 import com.krath.CaterFlowBackEnd.user.enums.UserRole;
 import com.krath.CaterFlowBackEnd.user.map.RolePrivilegeMapping;
 import com.krath.CaterFlowBackEnd.user.repository.UserRepository;
@@ -23,13 +23,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String Username) throws UsernameNotFoundException {
-        User user;
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUserName(username);
 
-        try {
-            user = userRepository.findByUserName(Username);
-        } catch (UsernameNotFoundException e) {
-            throw new UsernameNotFoundException("Username Not Found.");
+        if (user==null){
+            throw new UsernameNotFoundException("Username not found: "+username);
         }
         // Convert your User entity to Spring Security's UserDetails
         return new org.springframework.security.core.userdetails.User(

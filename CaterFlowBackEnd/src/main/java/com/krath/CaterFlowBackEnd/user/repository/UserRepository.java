@@ -1,6 +1,6 @@
 package com.krath.CaterFlowBackEnd.user.repository;
 
-import com.krath.CaterFlowBackEnd.user.enitity.User;
+import com.krath.CaterFlowBackEnd.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CaterFlow.iml" filepath="$PROJECT_DIR$/.idea/CaterFlow.iml" />
-      <module fileurl="file://$PROJECT_DIR$/CaterFlowBackEnd/CaterFlowBackEnd.iml" filepath="$PROJECT_DIR$/CaterFlowBackEnd/CaterFlowBackEnd.iml" />
     </modules>
   </component>
 </project>

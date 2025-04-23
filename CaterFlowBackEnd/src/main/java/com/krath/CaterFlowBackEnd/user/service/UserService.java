@@ -1,7 +1,7 @@
 package com.krath.CaterFlowBackEnd.user.service;
 
 
-import com.krath.CaterFlowBackEnd.user.enitity.User;
+import com.krath.CaterFlowBackEnd.user.entity.User;
 import com.krath.CaterFlowBackEnd.user.enums.UserRole;
 import org.springframework.stereotype.Service;
 

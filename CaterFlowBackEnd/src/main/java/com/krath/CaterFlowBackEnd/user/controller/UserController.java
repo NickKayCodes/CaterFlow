@@ -1,19 +1,15 @@
 package com.krath.CaterFlowBackEnd.user.controller;
 
-import com.krath.CaterFlowBackEnd.sec.SecurityConfig;
 import com.krath.CaterFlowBackEnd.sec.jwt.JwtUtil;
-import com.krath.CaterFlowBackEnd.user.enitity.User;
-import com.krath.CaterFlowBackEnd.user.repository.UserRepository;
+import com.krath.CaterFlowBackEnd.user.entity.User;
 import com.krath.CaterFlowBackEnd.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -22,10 +18,6 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200/")
 public class UserController {
 
-
-    @Autowired
-    private UserRepository userRepository;
-
     @Autowired
     private UserService userService;
 
@@ -33,52 +25,39 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    public UserController() {
-    }
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity loginUser(@RequestBody User userData) {
+    public ResponseEntity<?> loginUser(@RequestBody User userData) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userData.getUsername(), userData.getPassword())
             );
-            UserDetails userDetails = userService.getUserByEmail(userData.getEmail());
-
+            UserDetails userDetails = userService.findByUsername(userData.getUsername());
+            String token = jwtUtil.generateToken(userDetails.getUsername());
+            return ResponseEntity.ok(token);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
 
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userService.getAllUsers();
         return ResponseEntity.ok(userList);
     }
 
     @PostMapping("/register")
-    public ResponseEntity registerUser(@RequestBody User userData) {
-        //grab password from front end, encode using bcrypt and then set the encrypted password to store
+    public ResponseEntity<?> registerUser(@RequestBody User userData) {
         if (userData.getPassword() == null || userData.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body("Password cannot be null or empty.");
         }
 
-        String plainTextPw = userData.getPassword();
-        String encodedPw = passwordEncoder.encodePassword(plainTextPw);
-        userData.setPassword(encodedPw);
-
-        //save user before assigning roles due to jpa/hibernate not generating the id to enter the roles to the db
-//        User savedUser =
-        userRepository.save(userData);
-
-        //retrieve user from db since now there will be an ID associated with the user
-//        Optional<User> retrieveUser = userRepository.findById(savedUser.getId());
-//        if (retrieveUser.isPresent()) {
-//            Set<UserRole> rolesToAssign = userData.getRoles();
-//
-//            User u = retrieveUser.get();
-//            userService.assignRolesToUser(u, rolesToAssign);
-//        }
-
-        return ResponseEntity.ok("User successfully registered");
+        try {
+            userService.saveUser(userData);
+            return ResponseEntity.ok("User successfully registered");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error registering user: " + e.getMessage());
+        }
     }
 }

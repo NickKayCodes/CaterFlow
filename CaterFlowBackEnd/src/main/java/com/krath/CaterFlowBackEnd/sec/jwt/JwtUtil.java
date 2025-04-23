@@ -3,7 +3,9 @@ package com.krath.CaterFlowBackEnd.sec.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
+import jakarta.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -15,12 +17,16 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-    @Value("${jwt.secret}")
+
+    @PostConstruct
+    public void init(){
+        System.out.println("JwtUtil bean initialized with secret: "+ secret);
+    }
+
+    @Value("${jwt.secret:defaultSecretKey}")
     private String secret;
 
-    SecretKey k = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration:360000}")
     private long expiration;
 
     public String generateToken(String username) {
@@ -34,8 +40,13 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(k)
+                .signWith(getSigningKey())
                 .compact();
+    }
+
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String extractUsername(String token) {
@@ -48,10 +59,11 @@ public class JwtUtil {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(k).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
     public Boolean isTokenExpired(String token) {

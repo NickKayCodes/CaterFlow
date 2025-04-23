@@ -1,18 +1,20 @@
 package com.krath.CaterFlowBackEnd.user.service;
 
-import com.krath.CaterFlowBackEnd.user.enitity.User;
+import com.krath.CaterFlowBackEnd.user.entity.User;
 import com.krath.CaterFlowBackEnd.user.enums.UserRole;
 import com.krath.CaterFlowBackEnd.user.repository.UserRepository;
+
 import jakarta.transaction.Transactional;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,14 +23,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void saveUser(User user) {
+        // Encode password before saving
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        //unsure whether I want server or angular app to handle email validation... will have to decide in future
         return userRepository.getUserByEmail(email);
     }
 
@@ -40,7 +47,14 @@ public class UserServiceImpl implements UserService {
             updateUser.setFirstName(user.getFirstName());
             updateUser.setLastName(user.getLastName());
             updateUser.setEmail(user.getEmail());
-            updateUser.setPassword(user.getPassword());
+
+            // Encode password if it's updated
+            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                String encodedPassword = passwordEncoder.encode(user.getPassword());
+                updateUser.setPassword(encodedPassword);
+            }
+
+            userRepository.save(updateUser);
         }
     }
 
@@ -52,14 +66,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void removeUser(long id) {
         Optional<User> user = userRepository.findById(id);
-        try {
-            if (user.isPresent()) {
-                userRepository.deleteById(id);
-            }
-        } catch (Exception e) {
+        if (user.isPresent()) {
+            userRepository.deleteById(id);
+        } else {
             throw new IllegalArgumentException("User_Not_Found");
         }
-
     }
 
     @Override
@@ -71,14 +82,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void assignRolesToUser(User user, Set<UserRole> roles) {
-//        logger.info("starting assignRolesToUser()| " + user + " | " + roles);
-//        user.getRoles().removeAll(roles);
-//
-//        //since using an enum and UI will never have roles that does not exist we can just add the roles to the set directly
-//        user.getRoles().addAll(roles);
-//
-//        userRepository.save(user);
-//        logger.info("roles assigned to user complete: " + user);
+        user.getRoles().clear();
+        user.getRoles().addAll(roles);
+        userRepository.save(user);
+        logger.info("Roles assigned to user: {}", user);
     }
 
     @Override
